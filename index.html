@@ -159,7 +159,7 @@ footer .small{color:#bfe0e4}
 {
 const ZAP='5585999119629';
 // Datas já reservadas (AAAA-MM-DD). Atualizar aqui.
-const RESERVADAS=['2026-11-27','2026-11-28','2026-11-29','2026-12-12','2026-12-19'];
+let RESERVADAS=['2026-11-27','2026-11-28','2026-11-29','2026-12-12','2026-12-19'];
 const FERIADOS={'2026-11-20':'Consciência Negra','2026-12-25':'Natal','2026-12-31':'Réveillon','2027-01-01':'Ano Novo','2027-02-08':'Carnaval','2027-02-09':'Carnaval','2027-03-19':'São José','2027-03-25':'Data Magna CE','2027-03-26':'Sexta-feira Santa','2027-04-21':'Tiradentes','2027-05-01':'Dia do Trabalho','2027-05-27':'Corpus Christi','2027-09-07':'Independência','2027-10-12':'N. Sra. Aparecida','2027-11-02':'Finados','2027-11-15':'Proclamação','2027-11-20':'Consciência Negra','2027-12-25':'Natal','2027-12-31':'Réveillon'};
 const FOTOS=[['piscina','Piscina com cascata'],['drone1','Vista de cima'],['frente','Entrada com espelho d\'água'],['piscina4','Piscina e espreguiçadeiras'],['pergolado','Pergolado com deck'],['churrasqueira','Churrasqueira e forno a lenha'],['jardim','Jardim e garagem'],['jardim2','Jardim e varandas'],['pergolado2','Jardim com pergolado'],['aereo','Pátio interno'],['cascata','Cascata'],['drone2','Área da piscina'],['drone3','Localização']];
 document.getElementById('gal').innerHTML=FOTOS.map(([f,t])=>`<figure><img src="${f}.jpg" alt="${t}" loading="lazy"><figcaption>${t}</figcaption></figure>`).join('');
@@ -173,6 +173,7 @@ const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${Str
 const br=d=>d.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
 const pick=document.getElementById('pick'),months=document.getElementById('months');
 const FIM=new Date(2027,2,1);
+function draw(){
 let h='';
 for(let cur=new Date(hoje.getFullYear(),hoje.getMonth(),1);cur<=FIM;cur.setMonth(cur.getMonth()+1)){
   const y=cur.getFullYear(),m=cur.getMonth(),n=new Date(y,m+1,0).getDate(),off=new Date(y,m,1).getDay();
@@ -191,6 +192,9 @@ for(let cur=new Date(hoje.getFullYear(),hoje.getMonth(),1);cur<=FIM;cur.setMonth
   h+='</div></div>';
 }
 months.innerHTML=h;
+}
+draw();
+fetch('https://admin.mansaoeusebio.com.br/api/datas',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&Array.isArray(j.reservadas)){RESERVADAS=j.reservadas;draw()}}).catch(()=>{});
 months.addEventListener('click',e=>{
   const b=e.target.closest('.day');if(!b||b.disabled)return;
   months.querySelectorAll('.sel').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');
