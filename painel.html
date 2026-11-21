@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Reservas · Mansão Eusébio</title>
+<style>
+:root{--bg:#f3f7f8;--card:#fff;--ink:#0e2a30;--soft:#5b7278;--line:#d8e5e8;--deep:#0b4f5c;--pool:#13a6b8;--sun:#f2c230;--ok:#1d8a4b;--warn:#c47a00;--bad:#c0392b}
+@media(prefers-color-scheme:dark){:root{--bg:#0a1d22;--card:#10313a;--ink:#e8f3f4;--soft:#a9c2c6;--line:#1f4650}}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+.top{position:sticky;top:0;z-index:5;background:var(--deep);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.top h1{font-size:19px;margin:0;flex:1}
+.btn{min-height:46px;padding:0 18px;border-radius:12px;border:0;background:var(--sun);color:#1b1b12;font-weight:700;cursor:pointer}
+.btn.sec{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.btn.bad{background:var(--bad);color:#fff}
+.top .btn.sec{color:#fff;border-color:rgba(255,255,255,.5);padding:0 12px}
+.wrap{max-width:760px;margin:0 auto;padding:14px}
+.sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.sum div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.sum b{display:block;font-size:20px;white-space:nowrap}
+.sum span{font-size:13px;color:var(--soft)}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px}
+.tabs button{flex:none;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);cursor:pointer}
+.tabs button.on{background:var(--deep);color:#fff;border-color:var(--deep)}
+.busca{width:100%;min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--card);padding:0 14px;margin-bottom:12px}
+.mes{font-weight:700;color:var(--soft);margin:16px 4px 6px}.mes::first-letter{text-transform:uppercase}
+.res{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:10px;display:grid;grid-template-columns:62px minmax(0,1fr);gap:12px;cursor:pointer}
+.res:focus-visible{outline:3px solid var(--pool)}
+.dia{background:var(--deep);color:#fff;border-radius:12px;text-align:center;padding:6px 0;line-height:1.1;align-self:start}
+.dia b{display:block;font-size:24px}
+.dia small{font-size:12px;text-transform:uppercase}
+.res h3{margin:0 0 2px;font-size:17px}
+.meta{color:var(--soft);font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{font-size:13px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--bg);border:1px solid var(--line)}
+.chip.ok{color:var(--ok);border-color:var(--ok)}.chip.warn{color:var(--warn);border-color:var(--warn)}.chip.bad{color:var(--bad);border-color:var(--bad)}
+.acts{display:flex;gap:8px;margin-top:8px}
+.acts a{font-size:14px;font-weight:700;text-decoration:none;padding:7px 12px;border-radius:10px;background:#25d366;color:#fff}
+.acts a.tel{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.vazio{text-align:center;color:var(--soft);padding:40px 10px}
+.modal{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center}
+.modal.on{display:flex}
+.sheet{background:var(--card);width:100%;max-width:640px;max-height:94vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 16px 24px}
+@media(min-width:700px){.modal{align-items:center}.sheet{border-radius:20px}}
+.sheet h2{margin:0 0 12px;font-size:21px}
+label{display:block;font-size:14px;font-weight:600;margin:10px 0 4px}
+input,select,textarea{width:100%;min-height:46px;border-radius:10px;border:1px solid var(--line);background:var(--bg);padding:8px 12px;font-size:16px}
+textarea{min-height:84px;resize:vertical}
+.duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.rodape{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.rodape .btn{flex:1}
+.erro{color:var(--bad);font-weight:600;margin-top:10px;min-height:1em}
+.login{max-width:380px;margin:12vh auto;padding:24px;background:var(--card);border:1px solid var(--line);border-radius:20px}
+.login h1{margin:0 0 4px;font-size:24px}
+.falta{font-size:13px;color:var(--soft);margin-top:4px}
+.menu{position:absolute;right:12px;top:60px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.2);display:none;overflow:hidden}
+.menu.on{display:block}
+.menu button{display:block;width:100%;text-align:left;padding:14px 18px;border:0;background:none;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="telaLogin" class="login" hidden>
+  <h1>Mansão Eusébio</h1>
+  <p class="meta">Painel de reservas</p>
+  <form id="fLogin">
+    <label for="senha">Senha</label>
+    <input id="senha" type="password" autocomplete="current-password" required>
+    <div class="erro" id="eLogin"></div>
+    <button class="btn" style="width:100%;margin-top:8px">Entrar</button>
+  </form>
+</div>
+
+<div id="telaApp" hidden>
+  <header class="top">
+    <h1>Reservas</h1>
+    <button class="btn" id="bNova">+ Nova</button>
+    <button class="btn sec" id="bMenu" aria-label="Menu">☰</button>
+    <div class="menu" id="menu"><button id="bSenha">Trocar senha</button><button id="bSair">Sair</button></div>
+  </header>
+  <main class="wrap">
+    <div class="sum" id="sum"></div>
+    <div class="tabs" id="tabs">
+      <button data-f="prox" class="on">Próximas</button>
+      <button data-f="pre">Pré-reservas</button>
+      <button data-f="pend">Falta pagar</button>
+      <button data-f="canc">Canceladas</button>
+      <button data-f="pass">Passadas</button>
+    </div>
+    <input class="busca" id="busca" type="search" placeholder="Buscar por nome, telefone ou observação">
+    <div id="lista"></div>
+  </main>
+</div>
+
+<div class="modal" id="mRes"><div class="sheet">
+  <h2 id="tRes">Nova reserva</h2>
+  <form id="fRes">
+    <div class="duo">
+      <div><label for="data_inicio">Data do evento *</label><input type="date" id="data_inicio" required></div>
+      <div><label for="data_fim">Até (se for mais de 1 dia)</label><input type="date" id="data_fim"></div>
+    </div>
+    <label for="status">Situação</label>
+    <select id="status"><option value="pre">Pré-reserva (esperando sinal)</option><option value="confirmada">Confirmada</option><option value="cancelada">Cancelada (libera a data)</option></select>
+    <label for="nome">Nome de quem contratou</label><input id="nome" autocomplete="off">
+    <div class="duo">
+      <div><label for="telefone">Telefone / WhatsApp</label><input id="telefone" type="tel" inputmode="tel" placeholder="85 99999-9999"></div>
+      <div><label for="contato">Outro contato</label><input id="contato" placeholder="e-mail, Instagram..."></div>
+    </div>
+    <div class="duo">
+      <div><label for="tipo_evento">Tipo de evento</label><input id="tipo_evento" list="tipos" placeholder="Aniversário, casamento..."></div>
+      <div><label for="convidados">Nº de convidados</label><input id="convidados" type="number" inputmode="numeric" min="0"></div>
+    </div>
+    <datalist id="tipos"><option>Aniversário</option><option>Casamento</option><option>15 anos</option><option>Confraternização</option><option>Chá revelação</option><option>Batizado</option><option>Evento de empresa</option></datalist>
+    <div class="duo">
+      <div><label for="valor_total">Valor total (R$)</label><input id="valor_total" inputmode="decimal" placeholder="2000"></div>
+      <div><label for="valor_pago">Já pagou (R$)</label><input id="valor_pago" inputmode="decimal" placeholder="500"></div>
+    </div>
+    <div class="falta" id="falta"></div>
+    <div class="duo">
+      <div><label for="forma_pagamento">Forma de pagamento</label><select id="forma_pagamento"><option value="">—</option><option>Pix</option><option>Dinheiro</option><option>Cartão</option><option>Transferência</option><option>Outro</option></select></div>
+      <div><label for="buffet">Buffet</label><select id="buffet"><option value="">Não</option><option>Quer cotação</option><option>Contratado</option></select></div>
+    </div>
+    <label for="pedidos">O que pediu de diferente</label><textarea id="pedidos" placeholder="Ex.: chegar mais cedo, som até 22h, decoração..."></textarea>
+    <label for="observacoes">Observações</label><textarea id="observacoes"></textarea>
+    <div class="erro" id="eRes"></div>
+    <div class="rodape">
+      <button type="button" class="btn sec" id="bFechar">Voltar</button>
+      <button type="button" class="btn bad" id="bExcluir" hidden>Excluir</button>
+      <button class="btn" id="bSalvar">Salvar</button>
+    </div>
+  </form>
+</div></div>
+
+<div class="modal" id="mConf"><div class="sheet">
+  <h2 id="tConf"></h2><p id="pConf"></p>
+  <div class="rodape"><button class="btn sec" id="cNao">Não</button><button class="btn" id="cSim">Sim</button></div>
+</div></div>
+
+<div class="modal" id="mSenha"><div class="sheet">
+  <h2>Trocar senha</h2>
+  <form id="fSenha">
+    <label for="sAtual">Senha atual</label><input id="sAtual" type="password" required>
+    <label for="sNova">Nova senha (mínimo 6)</label><input id="sNova" type="password" minlength="6" required>
+    <div class="erro" id="eSenha"></div>
+    <div class="rodape"><button type="button" class="btn sec" id="sFechar">Voltar</button><button class="btn">Salvar senha</button></div>
+  </form>
+</div></div>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const CAMPOS=['data_inicio','data_fim','status','nome','telefone','contato','tipo_evento','convidados','valor_total','valor_pago','forma_pagamento','buffet','pedidos','observacoes'];
+let todas=[],filtro='prox',editando=null;
+const brl=v=>(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const _h=new Date();const hoje=`${_h.getFullYear()}-${String(_h.getMonth()+1).padStart(2,'0')}-${String(_h.getDate()).padStart(2,'0')}`;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=v=>{if(v===''||v==null)return null;v=String(v).trim().replace(/\s|R\$/g,'');if(v.includes(','))v=v.replace(/\./g,'').replace(',','.');const n=Number(v);return isNaN(n)?null:n};
+const dt=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+async function api(url,op={}){const r=await fetch(url,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...op});const j=await r.json().catch(()=>({}));return{ok:r.ok,status:r.status,j}}
+
+function perguntar(t,p){return new Promise(res=>{$('tConf').textContent=t;$('pConf').textContent=p;$('mConf').classList.add('on');
+  $('cSim').onclick=()=>{$('mConf').classList.remove('on');res(true)};$('cNao').onclick=()=>{$('mConf').classList.remove('on');res(false)}})}
+
+async function iniciar(){const r=await api('/api/eu');if(r.j.logado){$('telaLogin').hidden=true;$('telaApp').hidden=false;carregar()}else{$('telaApp').hidden=true;$('telaLogin').hidden=false;$('senha').focus()}}
+$('fLogin').onsubmit=async e=>{e.preventDefault();$('eLogin').textContent='';const r=await api('/api/login',{method:'POST',body:JSON.stringify({senha:$('senha').value})});if(r.ok){$('senha').value='';iniciar()}else $('eLogin').textContent=r.j.erro||'Não foi possível entrar.'};
+
+async function carregar(){const r=await api('/api/reservas');if(r.status===401)return iniciar();todas=r.j;render()}
+const fim=x=>x.data_fim||x.data_inicio;
+const falta=x=>x.valor_total!=null?Math.max(0,(x.valor_total||0)-(x.valor_pago||0)):null;
+function render(){
+  const q=$('busca').value.trim().toLowerCase();
+  const fut=todas.filter(x=>fim(x)>=hoje&&x.status!=='cancelada');
+  const conf=fut.filter(x=>x.status==='confirmada').length;
+  const receber=fut.reduce((s,x)=>s+(falta(x)||0),0);
+  $('sum').innerHTML=`<div><b>${conf}</b><span>confirmadas</span></div><div><b>${fut.filter(x=>x.status==='pre').length}</b><span>pré-reservas</span></div><div><b>${brl(receber)}</b><span>a receber</span></div>`;
+  let l=todas.filter(x=>{
+    if(filtro==='prox')return fim(x)>=hoje&&x.status!=='cancelada';
+    if(filtro==='pre')return x.status==='pre'&&fim(x)>=hoje;
+    if(filtro==='pend')return x.status!=='cancelada'&&(falta(x)>0||x.valor_total==null)&&fim(x)>=hoje;
+    if(filtro==='canc')return x.status==='cancelada';
+    return fim(x)<hoje&&x.status!=='cancelada'});
+  if(filtro==='pass'||filtro==='canc')l.reverse();
+  if(q)l=l.filter(x=>[x.nome,x.telefone,x.contato,x.tipo_evento,x.pedidos,x.observacoes].join(' ').toLowerCase().includes(q));
+  if(!l.length){$('lista').innerHTML='<div class="vazio">Nenhuma reserva aqui.<br>Toque em <b>+ Nova</b> para cadastrar.</div>';return}
+  let h='',mesAt='';
+  for(const x of l){
+    const d=dt(x.data_inicio),m=d.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+    if(m!==mesAt){h+=`<div class="mes">${m}</div>`;mesAt=m}
+    const f=falta(x);
+    const pag=x.valor_total==null?'<span class="chip warn">Sem valor</span>':f===0?'<span class="chip ok">Pago</span>':`<span class="chip warn">Falta ${brl(f)}</span>`;
+    const st=x.status==='confirmada'?'<span class="chip ok">Confirmada</span>':x.status==='pre'?'<span class="chip warn">Pré-reserva</span>':'<span class="chip bad">Cancelada</span>';
+    const ate=x.data_fim&&x.data_fim!==x.data_inicio?` até ${dt(x.data_fim).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}`:'';
+    const tel=(x.telefone||'').replace(/\D/g,'');const zap=tel?(tel.length<=11?'55'+tel:tel):'';
+    h+=`<div class="res" tabindex="0" data-id="${x.id}"><div class="dia"><small>${d.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','')}</small><b>${d.getDate()}</b><small>${d.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')}</small></div><div>
+      <h3>${esc(x.nome||'Sem nome')}</h3>
+      <div class="meta">${esc([x.tipo_evento,x.convidados?x.convidados+' pessoas':'',ate.trim()].filter(Boolean).join(' · '))}</div>
+      <div class="chips">${st}${x.status!=='cancelada'?pag:''}${x.buffet?`<span class="chip">Buffet: ${esc(x.buffet)}</span>`:''}${x.pedidos?'<span class="chip">Tem pedidos</span>':''}</div>
+      ${zap?`<div class="acts"><a href="https://wa.me/${zap}" target="_blank" rel="noopener">WhatsApp</a><a class="tel" href="tel:+${zap}">Ligar ${esc(x.telefone)}</a></div>`:''}
+    </div></div>`}
+  $('lista').innerHTML=h}
+
+$('lista').addEventListener('click',e=>{if(e.target.closest('a'))return;const c=e.target.closest('.res');if(c)abrir(todas.find(x=>x.id==c.dataset.id))});
+$('lista').addEventListener('keydown',e=>{if(e.key==='Enter'){const c=e.target.closest('.res');if(c)abrir(todas.find(x=>x.id==c.dataset.id))}});
+$('tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;filtro=b.dataset.f;[...$('tabs').children].forEach(x=>x.classList.toggle('on',x===b));render()};
+$('busca').oninput=render;
+
+function abrir(x){editando=x?x.id:null;$('tRes').textContent=x?'Editar reserva':'Nova reserva';$('bExcluir').hidden=!x;$('eRes').textContent='';
+  for(const k of CAMPOS){const el=$(k);let v=x?x[k]:'';if(v==null)v='';if((k==='valor_total'||k==='valor_pago')&&v!=='')v=String(v).replace('.',',');el.value=v}
+  if(!x)$('status').value='pre';calcFalta();$('mRes').classList.add('on');$('data_inicio').focus()}
+function calcFalta(){const t=num($('valor_total').value),p=num($('valor_pago').value)||0;$('falta').textContent=t==null?'':(t-p>0?`Falta receber ${brl(t-p)}`:'Pagamento completo ✔')}
+$('valor_total').oninput=calcFalta;$('valor_pago').oninput=calcFalta;
+$('bNova').onclick=()=>abrir(null);$('bFechar').onclick=()=>$('mRes').classList.remove('on');
+$('fRes').onsubmit=async e=>{e.preventDefault();await salvar(false)};
+async function salvar(forcar){
+  const d={forcar};for(const k of CAMPOS)d[k]=$(k).value;d.valor_total=num(d.valor_total);d.valor_pago=num(d.valor_pago);d.convidados=d.convidados?Number(d.convidados):null;
+  $('bSalvar').disabled=true;
+  const r=await api(editando?'/api/reservas/'+editando:'/api/reservas',{method:editando?'PUT':'POST',body:JSON.stringify(d)});
+  $('bSalvar').disabled=false;
+  if(r.status===409){if(await perguntar('Data já ocupada',r.j.erro+' Quer salvar mesmo assim?'))return salvar(true);return}
+  if(!r.ok){$('eRes').textContent=r.j.erro||'Não foi possível salvar.';return}
+  $('mRes').classList.remove('on');carregar()}
+$('bExcluir').onclick=async()=>{if(!(await perguntar('Excluir reserva?','Isso apaga a reserva para sempre. Se a cliente só desistiu, prefira mudar a situação para "Cancelada".')))return;
+  await api('/api/reservas/'+editando,{method:'DELETE'});$('mRes').classList.remove('on');carregar()};
+
+$('bMenu').onclick=e=>{e.stopPropagation();$('menu').classList.toggle('on')};document.addEventListener('click',()=>$('menu').classList.remove('on'));
+$('bSair').onclick=async()=>{await api('/api/sair',{method:'POST'});iniciar()};
+$('bSenha').onclick=()=>{$('eSenha').textContent='';$('fSenha').reset();$('mSenha').classList.add('on')};$('sFechar').onclick=()=>$('mSenha').classList.remove('on');
+$('fSenha').onsubmit=async e=>{e.preventDefault();const r=await api('/api/senha',{method:'POST',body:JSON.stringify({atual:$('sAtual').value,nova:$('sNova').value})});
+  if(r.ok){$('mSenha').classList.remove('on');iniciar()}else $('eSenha').textContent=r.j.erro||'Erro'};
+iniciar();
+}
+</script>
+</body>
+</html>
